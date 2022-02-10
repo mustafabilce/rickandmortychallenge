@@ -3,6 +3,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { Row, Col, Button, Avatar } from "antd";
 import { StyledLocationCard ,BoldText } from "../styles"
+import LocationIcon from "../../assets/location-icon.png"
 
 const { Meta } = StyledLocationCard;
 
@@ -30,7 +31,7 @@ const Locations = () => {
               >
                 <Meta
                   avatar={
-                    <Avatar src="https://cdn-icons.flaticon.com/png/512/2744/premium/2744565.png?token=exp=1644487460~hmac=29effc75a2e6e0595caa5b01e129148d" />
+                    <Avatar src={LocationIcon} />
                   }
                   description={[
                     <div>
