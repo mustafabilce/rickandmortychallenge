@@ -1,42 +1,29 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams, Link } from "react-router-dom";
-import { Row, Col, Card, PageHeader } from "antd";
+import { useParams } from "react-router-dom";
+import { Row, Col } from "antd";
+import {
+  StyledCard,
+  StatusStyle,
+  StyledDivider,
+  StyledPageHeader,
+} from "./styles";
 
 const Residents = () => {
   const { id } = useParams();
   const [residents, setResidents] = useState([]);
   const [selectedResidents, setSelectedResidents] = useState([]);
 
-  const statusAlive = {
-    color: "white",
-    backgroundColor: "green",
-    padding: "4px 10px",
-    borderRadius: "3px",
-  };
-
-  const statusDead = {
-    color: "white",
-    backgroundColor: "red",
-    padding: "4px 10px",
-    borderRadius: "3px",
-  };
-
-  const statusUnkown = {
-    color: "white",
-    backgroundColor: "#9e9e9e",
-    padding: "4px 10px",
-    borderRadius: "3px",
-  };
-
+  // Get characters api url in this location
   useEffect(() => {
     axios
       .get(`https://rickandmortyapi.com/api/location/${id}`)
       .then((response) => setResidents(response.data.residents));
-  }, []);
+  }, [id]);
 
-  useEffect(async () => {
-    await axios.all(residents.map((l) => axios.get(l))).then(
+  // Characters urls mapped, get data for each character
+  useEffect(() => {
+    axios.all(residents.map((singleCharacter) => axios.get(singleCharacter))).then(
       axios.spread(function (...res) {
         setSelectedResidents(res);
       })
@@ -44,11 +31,9 @@ const Residents = () => {
   }, [residents]);
   return (
     <div>
-      <PageHeader
-      style={{padding: "0 15px 12px"}}
+      <StyledPageHeader
         onBack={() => window.history.back()}
         title="Locations"
-        // subTitle="This is a subtitle"
       />
       <Row>
         {selectedResidents.map((selectedResident) => {
@@ -58,34 +43,66 @@ const Residents = () => {
               key={selectedResident.data.id}
               style={{ padding: "15px" }}
             >
-              <Card
+              <StyledCard
+                size="small"
                 cover={<img alt="example" src={selectedResident.data.image} />}
               >
                 <p>
-                  <strong>Name: </strong> {selectedResident.data.name}
+                  <strong>Name </strong> <br />{" "}
+                  <span>{selectedResident.data.name}</span>
                 </p>
+                <StyledDivider />
                 <p>
-                  <strong>Species: </strong> {selectedResident.data.species}
+                  <strong>Species </strong> <br />{" "}
+                  <span>{selectedResident.data.species}</span>
                 </p>
+                <StyledDivider />
                 <p>
-                  <strong>Type: </strong> {selectedResident.data.type}
-                </p>
-                <p>
-                  <strong>Gender: </strong> {selectedResident.data.gender}
-                </p>
-                <p style={{ marginBottom: "0" }}>
-                  <strong>Status: </strong> 
-                  {selectedResident.data.status === "Dead" ? (
-                    <span style={statusDead}>
-                      <span>Dead</span>
-                    </span>
-                  ) : selectedResident.data.status === "Alive" ? (
-                    <span style={statusAlive}>Alive</span>
+                  <strong>Type </strong> <br />{" "}
+                  {selectedResident.data.type === "" ? (
+                    <span>Unknown </span>
                   ) : (
-                    <span style={statusUnkown}>Unkown</span>
+                    <span>{selectedResident.data.type}</span>
                   )}
                 </p>
-              </Card>
+                <StyledDivider />
+                <p>
+                  <strong>Gender </strong> <br />{" "}
+                  <span>{selectedResident.data.gender}</span>
+                </p>
+                <StyledDivider />
+                <p>
+                  <strong>Origin Name </strong> <br />{" "}
+                  <span>{selectedResident.data.origin.name}</span>
+                </p>
+                <StyledDivider />
+                <p>
+                  <strong>Origin Url </strong> <br />{" "}
+                  {selectedResident.data.origin.url === "" ? (
+                    <span>Unknown </span>
+                  ) : (
+                    <span>{selectedResident.data.origin.url}</span>
+                  )}
+                </p>
+                <StyledDivider />
+                {/* Conditional rendering by status */}
+                <p>
+                  <strong>Status </strong> <br />
+                  {selectedResident.data.status === "Dead" ? (
+                    <span>
+                      <StatusStyle dead /> {selectedResident.data.status}
+                    </span>
+                  ) : selectedResident.data.status === "Alive" ? (
+                    <span>
+                      <StatusStyle alive /> {selectedResident.data.status}{" "}
+                    </span>
+                  ) : (
+                    <span>
+                      <StatusStyle Unknown /> {selectedResident.data.status}{" "}
+                    </span>
+                  )}
+                </p>
+              </StyledCard>
             </Col>
           );
         })}
