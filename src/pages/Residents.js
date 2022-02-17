@@ -1,114 +1,75 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { api } from "../api";
+import { ResidentCard } from "../components"
 import { useParams } from "react-router-dom";
 import { Row, Col } from "antd";
-import {
-  StyledCard,
-  StatusStyle,
-  StyledDivider,
-  StyledPageHeader,
-} from "./styles";
+import { StyledPageHeader } from "./styles";
 
 const Residents = () => {
   const { id } = useParams();
-  const [residents, setResidents] = useState([]);
+  const [location, setLocation] = useState([]);
+  const [loading, setLoading] = useState(true)
   const [selectedResidents, setSelectedResidents] = useState([]);
 
-  // Get characters api url in this location
   useEffect(() => {
-    axios
-      .get(`https://rickandmortyapi.com/api/location/${id}`)
-      .then((response) => setResidents(response.data.residents));
-  }, [id]);
+    getLocation();
+    getResidents();
+  },[location]);
 
-  // Characters urls mapped, get data for each character
-  useEffect(() => {
-    axios.all(residents.map((singleCharacter) => axios.get(singleCharacter))).then(
-      axios.spread(function (...res) {
-        setSelectedResidents(res);
-      })
-    );
-  }, [residents]);
-  return (
-    <div>
-      <StyledPageHeader
-        onBack={() => window.history.back()}
-        title="Locations"
-      />
-      <Row>
-        {selectedResidents.map((selectedResident) => {
-          return (
-            <Col
-              span={6}
-              key={selectedResident.data.id}
-              style={{ padding: "15px" }}
-            >
-              <StyledCard
-                size="small"
-                cover={<img alt="example" src={selectedResident.data.image} />}
+  const getLocation = () => {
+    api()
+      .get(`/location/${id}`)
+      .then((response) =>
+        setLocation(
+          response.data.residents
+            .join("")
+            .toString()
+            .split("https://rickandmortyapi.com/api/character/")
+            .toString()
+            .replace(/^,/, "")
+        )
+      );
+      setLoading(false);
+  }
+
+  const getResidents = () => {
+    if (loading === false) {
+      api()
+      .get(`/character/${location}`)
+      .then((response) => setSelectedResidents(response.data));
+    }
+  }
+
+  if(loading === false) {
+    return (
+      <div>
+        <div>
+        <StyledPageHeader
+          onBack={() => window.history.back()}
+          title="Locations"
+        />
+        <Row>
+          {selectedResidents.map((selectedResident) => {
+            return (
+              <Col
+                span={8}
+                key={selectedResident.id}
+                style={{ padding: "15px" }}
               >
-                <p>
-                  <strong>Name </strong> <br />{" "}
-                  <span>{selectedResident.data.name}</span>
-                </p>
-                <StyledDivider />
-                <p>
-                  <strong>Species </strong> <br />{" "}
-                  <span>{selectedResident.data.species}</span>
-                </p>
-                <StyledDivider />
-                <p>
-                  <strong>Type </strong> <br />{" "}
-                  {selectedResident.data.type === "" ? (
-                    <span>Unknown </span>
-                  ) : (
-                    <span>{selectedResident.data.type}</span>
-                  )}
-                </p>
-                <StyledDivider />
-                <p>
-                  <strong>Gender </strong> <br />{" "}
-                  <span>{selectedResident.data.gender}</span>
-                </p>
-                <StyledDivider />
-                <p>
-                  <strong>Origin Name </strong> <br />{" "}
-                  <span>{selectedResident.data.origin.name}</span>
-                </p>
-                <StyledDivider />
-                <p>
-                  <strong>Origin Url </strong> <br />{" "}
-                  {selectedResident.data.origin.url === "" ? (
-                    <span>Unknown </span>
-                  ) : (
-                    <span>{selectedResident.data.origin.url}</span>
-                  )}
-                </p>
-                <StyledDivider />
-                {/* Conditional rendering by status */}
-                <p>
-                  <strong>Status </strong> <br />
-                  {selectedResident.data.status === "Dead" ? (
-                    <span>
-                      <StatusStyle dead /> {selectedResident.data.status}
-                    </span>
-                  ) : selectedResident.data.status === "Alive" ? (
-                    <span>
-                      <StatusStyle alive /> {selectedResident.data.status}{" "}
-                    </span>
-                  ) : (
-                    <span>
-                      <StatusStyle Unknown /> {selectedResident.data.status}{" "}
-                    </span>
-                  )}
-                </p>
-              </StyledCard>
-            </Col>
-          );
-        })}
-      </Row>
-    </div>
-  );
+                <ResidentCard selectedResident={selectedResident} />
+              </Col>
+            );
+          })}
+        </Row>
+      </div>
+      </div>
+    );
+  } else {
+    return (
+      <h1>LOADING</h1>
+    )
+  }
+  
 };
 
 export default Residents;

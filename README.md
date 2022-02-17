@@ -18,5 +18,5 @@ You may also see any lint errors in the console.
 
 ## Tech
 
-Rick and Morty Challenge requires [React.js](https://reactjs.org/) v17+ to run.
+Rick and Morty Challenge requires [React.js](https://reactjs.org/) v17+ , [Antd](https://ant.design/) v4+ , [Styled-Components](https://styled-components.com/) v5+ to run.
 

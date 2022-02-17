@@ -26,38 +26,6 @@ export const StyledFooter = styled(Footer)`
   text-align: center;
 `;
 
-export const StatusStyle = styled.span`
-    height: 10px;
-    width: 10px;
-    background-color: ${ props => props.dead ? "#de2f1f" : props.alive ? "#29cf55" : "#bdbdbd" };
-    display: inline-block;
-    border-radius: 50%;
-    margin: 0 5px;
-`;
-
-export const StyledLocationCard = styled(Card)`
-    margin-bottom: 15px;
-`;
-
-export const StyledCard = styled(Card)`
-  text-align: center;
-    & p {
-        font-size: 12px;
-        margin: 0;
-            &:last-child {
-                margin-bottom: 0;
-            }
-    }
-`;
-
-export const StyledDivider = styled(Divider)`
-  margin: 10px;
-`;
-
-export const BoldText = styled.strong`
-    color: #000;
-`;
-
 export const StyledPageHeader = styled(PageHeader)`
     padding: 0 15px 12px
 `;
