@@ -1,8 +1,8 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import Locations from "./pages/Locations";
 import Residents from "./pages/Residents";
-import "./App.css";
-import { Body, StyledLayout, StyledHeader, StyledContent, StyledFooter } from "./pages/styles"
+import RamLogo from "./assets/ram-logo.png"
+import { Body, StyledLayout, StyledHeader, StyledContent, StyledFooter } from "./styles"
 
 function App() {
   return (
@@ -11,6 +11,7 @@ function App() {
       <StyledLayout>
         <StyledHeader>
           <h4>Rick and Morty</h4>
+          <img src={RamLogo} alt="rick and morty logo" />
         </StyledHeader>
         <StyledContent>
           <Routes>

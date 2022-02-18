@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { api } from "../api";
 import { Row, Col } from "antd";
-import { LocationCard } from "../../components";
+import { LocationCard } from "../components";
 
 const Locations = () => {
   const [locations, setLocations] = useState([]);
 
   // Get all locations
   useEffect(() => {
-    axios
-      .get("https://rickandmortyapi.com/api/location")
+    api()
+      .get("/location")
       .then((response) => setLocations(response.data.results));
   }, []);
 

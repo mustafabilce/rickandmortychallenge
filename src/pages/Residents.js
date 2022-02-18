@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { api } from "../api";
-import { ResidentCard } from "../components"
+import { ResidentCard, Loading } from "../components"
 import { useParams } from "react-router-dom";
 import { Row, Col } from "antd";
 import { StyledPageHeader } from "./styles";
@@ -52,7 +52,7 @@ const Residents = () => {
           {selectedResidents.map((selectedResident) => {
             return (
               <Col
-                span={8}
+                span={6}
                 key={selectedResident.id}
                 style={{ padding: "15px" }}
               >
@@ -66,7 +66,7 @@ const Residents = () => {
     );
   } else {
     return (
-      <h1>LOADING</h1>
+      <Loading />
     )
   }
   
